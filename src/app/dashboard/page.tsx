@@ -102,7 +102,7 @@ export default function DashboardPage() {
                   { action: "Updated profile", time: "1 hour ago", icon: "👤" },
                   { action: "Completed project", time: "3 hours ago", icon: "✅" },
                   { action: "Created new task", time: "1 day ago", icon: "📝" },
-                ].map((activity) => (
+                ].map((activity, index) => (
                   <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{activity.icon}</span>
