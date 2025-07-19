@@ -38,7 +38,7 @@ export default function DashboardPage() {
             Welcome back, {session.user?.name || session.user?.email?.split('@')[0]}! 👋
           </h1>
           <p className="text-white/80 text-lg">
-            Here's what's happening with your account today.
+            Here&apos;s what&apos;s happening with your account today.
           </p>
         </div>
 

@@ -131,7 +131,7 @@ export default function SettingsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-white font-medium">Show Activity Status</h3>
-                  <p className="text-white/70 text-sm">Let others see when you're active</p>
+                  <p className="text-white/70 text-sm">Let others see when you&apos;re active</p>
                 </div>
                 <button
                   onClick={() => setPreferences({

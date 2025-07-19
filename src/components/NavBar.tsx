@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 
@@ -15,9 +16,11 @@ export default function NavBar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
-              <img 
+              <Image 
                 src="/logo.png" 
                 alt="MERN Stack Logo" 
+                width={40}
+                height={40}
                 className="w-full h-full object-cover"
               />
             </div>

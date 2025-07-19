@@ -118,7 +118,7 @@ export default function SecurityPage() {
             {twoFactorEnabled && (
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
                 <p className="text-white/80 text-sm mb-3">
-                  Two-factor authentication is enabled. You'll need to enter a code from your authenticator app when signing in.
+                  Two-factor authentication is enabled. You&apos;ll need to enter a code from your authenticator app when signing in.
                 </p>
                 <button className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200">
                   Disable 2FA
