@@ -1,102 +1,235 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+
+export default function HomePage() {
+  const { data: session } = useSession();
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-8">
+              <span className="text-white text-sm font-medium">✨ Modern Full-Stack Application</span>
+            </div>
+            
+            {/* Main Heading */}
+            <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 leading-tight">
+              MERN
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Stack Pro
+              </span>
+            </h1>
+            
+            {/* Description */}
+            <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+              A production-grade full-stack application built with MongoDB, Express.js (Next.js), React, and Node.js. 
+              Featuring modern authentication, role-based access control, and a beautiful user interface.
+            </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              {session ? (
+                <Link 
+                  href="/dashboard" 
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  Go to Dashboard →
+                </Link>
+              ) : (
+                <>
+                  <Link 
+                    href="/register" 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  >
+                    Get Started Free
+                  </Link>
+                  <Link 
+                    href="/login" 
+                    className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 border border-white/20"
+                  >
+                    Sign In
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Powerful Features
+            </h2>
+            <p className="text-white/80 text-lg max-w-2xl mx-auto">
+              Built with modern technologies and best practices for enterprise-grade applications
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: "🔐",
+                title: "Secure Authentication",
+                description: "JWT-based authentication with NextAuth.js, supporting email/password and OAuth providers"
+              },
+              {
+                icon: "🛡️",
+                title: "Role-Based Access",
+                description: "Advanced RBAC system with admin controls and audit logging for enterprise security"
+              },
+              {
+                icon: "📊",
+                title: "Modern Dashboard",
+                description: "Beautiful, responsive dashboard with real-time data and interactive components"
+              },
+              {
+                icon: "🚀",
+                title: "Production Ready",
+                description: "Built with Next.js 15, TypeScript, and modern development practices"
+              }
+            ].map((feature, index) => (
+              <div 
+                key={index} 
+                className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-6 text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:bg-white/10"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                <p className="text-white/70 text-sm leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Tech Stack Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              Built With Modern Tech
+            </h2>
+            <p className="text-white/80 text-lg">
+              Leveraging the latest and greatest technologies for optimal performance
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {[
+              { name: "Next.js 15", color: "bg-black" },
+              { name: "React 18", color: "bg-cyan-500" },
+              { name: "TypeScript", color: "bg-blue-600" },
+              { name: "MongoDB", color: "bg-green-600" },
+              { name: "Tailwind CSS", color: "bg-sky-500" },
+              { name: "NextAuth.js", color: "bg-purple-600" }
+            ].map((tech, index) => (
+              <div 
+                key={index} 
+                className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 text-center transition-all duration-300 hover:transform hover:-translate-y-2 hover:bg-white/10"
+              >
+                <div className={`w-12 h-12 rounded-lg mx-auto mb-3 flex items-center justify-center shadow-lg ${tech.color}`}>
+                  <span className="text-white font-bold">
+                    {tech.name.charAt(0)}
+                  </span>
+                </div>
+                <p className="text-white font-medium text-sm">{tech.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      {!session && (
+        <section className="py-20">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-12">
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Ready to Get Started?
+              </h2>
+              <p className="text-white/80 text-lg mb-8">
+                Join thousands of developers building amazing applications with our modern MERN stack
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  href="/register" 
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                >
+                  Create Account
+                </Link>
+                <Link 
+                  href="/about" 
+                  className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 border border-white/20"
+                >
+                  Learn More
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Footer */}
+      <footer className="py-12 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Brand */}
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start space-x-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold">M</span>
+                </div>
+                <span className="text-white font-semibold">MERN Stack Pro</span>
+              </div>
+              <p className="text-white/70 text-sm">
+                Modern full-stack application built with Next.js, MongoDB, and modern authentication.
+              </p>
+            </div>
+
+            {/* Contact */}
+            <div className="text-center">
+              <h3 className="text-white font-semibold mb-4">Contact</h3>
+              <div className="space-y-2 text-white/70 text-sm">
+                <p>
+                  <a href="mailto:info@jasskhinda.com" className="hover:text-blue-300 transition-colors">
+                    info@jasskhinda.com
+                  </a>
+                </p>
+                <p>
+                  <a href="https://jasskhinda.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">
+                    jasskhinda.com
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            {/* Contributors */}
+            <div className="text-center md:text-right">
+              <h3 className="text-white font-semibold mb-4">Contributors</h3>
+              <div className="space-y-2 text-white/70 text-sm">
+                <p>Jaspal Singh</p>
+                <p>Paramjit Singh</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-white/10">
+            <div className="text-white/60 text-sm mb-4 md:mb-0">
+              © 2025 MERN Full-Stack Tutorial. Website built by jasskhinda.com
+            </div>
+            <div className="text-white/60 text-sm">
+              Following MERN Full-Stack Application Development Tutorial by Aditya Saxena
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

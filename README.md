@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MERN Full-Stack Application
+
+A comprehensive full-stack web application built with MongoDB, Express.js (replaced by Next.js), React, and Node.js. This project demonstrates modern web development practices including authentication, authorization, and admin functionality.
+
+## Team Members
+- Jaspal Singh
+- Paramjit Singh
+
+## Features
+
+- **User Authentication**: Email/password registration and login
+- **OAuth Integration**: Google Sign-In support
+- **Session Management**: Secure JWT-based sessions with NextAuth.js
+- **Password Security**: bcrypt hashing for password storage
+- **Password Recovery**: Token-based password reset functionality
+- **Role-Based Access Control**: User and Admin roles with middleware protection
+- **Admin Dashboard**: User management interface for administrators
+- **Audit Logging**: Track administrative actions for security and compliance
+- **Responsive Design**: Mobile-friendly UI with Tailwind CSS
+- **TypeScript**: Full type safety across the application
+
+## Tech Stack
+
+- **Frontend**: React 18, Next.js 15, TypeScript, Tailwind CSS
+- **Backend**: Next.js API Routes (replacing Express.js)
+- **Database**: MongoDB with native driver
+- **Authentication**: NextAuth.js with Credentials and Google providers
+- **Deployment**: Ready for Vercel or similar platforms
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ installed
+- MongoDB Atlas account or local MongoDB instance
+- Google OAuth credentials (optional)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Configure environment variables in `.env.local`:
+   ```
+   MONGODB_URI=your_mongodb_connection_string
+   NEXTAUTH_SECRET=your_secret_key
+   NEXTAUTH_URL=http://localhost:3000
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── admin/             # Admin pages
+│   ├── dashboard/         # Protected user dashboard
+│   ├── login/             # Authentication pages
+│   └── register/
+├── components/            # Reusable React components
+├── lib/                   # Utility functions and database connection
+└── middleware.ts          # Authentication middleware
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Features Implementation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Authentication Flow
+- Users can register with email and password
+- Passwords are hashed using bcrypt before storage
+- Login supports both credentials and Google OAuth
+- Sessions are managed with JWT tokens
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Authorization
+- Middleware protects routes based on authentication status
+- Admin routes require admin role verification
+- Role changes are logged in audit trail
 
-## Learn More
+### Admin Features
+- View all registered users
+- Promote/demote user roles
+- View audit logs of administrative actions
+- Protection against removing last admin
 
-To learn more about Next.js, take a look at the following resources:
+## Security Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Password hashing with bcrypt (12 rounds)
+- Environment variable protection
+- CSRF protection via NextAuth
+- Secure session cookies
+- Role-based middleware protection
+- Audit logging for accountability
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Database Schema
 
-## Deploy on Vercel
+### Users Collection
+```javascript
+{
+  _id: ObjectId,
+  name: string,
+  email: string,
+  password: string (hashed),
+  role: "user" | "admin",
+  oauthProvider?: string,
+  createdAt: Date
+}
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Audit Logs Collection
+```javascript
+{
+  _id: ObjectId,
+  timestamp: Date,
+  actorId: ObjectId,
+  targetUserId: ObjectId,
+  action: string,
+  details: object
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development Notes
+
+This application was developed as part of an in-class assignment to demonstrate proficiency in full-stack JavaScript development. The implementation follows industry best practices and modern architectural patterns.
