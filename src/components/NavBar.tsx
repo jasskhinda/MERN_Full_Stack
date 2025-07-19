@@ -9,36 +9,40 @@ export default function NavBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/10">
+    <header className="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/20 shadow-lg">
       <nav className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xl">M</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
+              <img 
+                src="/logo.png" 
+                alt="MERN Stack Logo" 
+                className="w-full h-full object-cover"
+              />
             </div>
-            <span className="text-white font-bold text-xl hidden sm:block">MERN Stack</span>
+            <span className="text-white font-bold text-xl hidden sm:block drop-shadow-lg">MERN Stack</span>
           </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-white hover:text-blue-300 font-medium transition-colors">
+            <Link href="/" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
               Home
             </Link>
-            <Link href="/about" className="text-white hover:text-blue-300 font-medium transition-colors">
+            <Link href="/about" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
               About
             </Link>
             {session && (
-              <Link href="/dashboard" className="text-white hover:text-blue-300 font-medium transition-colors">
+              <Link href="/dashboard" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
                 Dashboard
               </Link>
             )}
-            {session && (session.user as any)?.role === "admin" && (
+            {session && (session.user as { role?: string })?.role === "admin" && (
               <>
-                <Link href="/admin/users" className="text-white hover:text-blue-300 font-medium transition-colors">
+                <Link href="/admin/users" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
                   Users
                 </Link>
-                <Link href="/admin/audit" className="text-white hover:text-blue-300 font-medium transition-colors">
+                <Link href="/admin/audit" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
                   Audit
                 </Link>
               </>
@@ -81,9 +85,9 @@ export default function NavBar() {
                       <div className="px-4 py-3 border-b border-white/10">
                         <p className="text-white font-medium">{session.user?.name || 'User'}</p>
                         <p className="text-white/70 text-sm">{session.user?.email}</p>
-                        {(session.user as any)?.role && (
+                        {(session.user as { role?: string })?.role && (
                           <span className="inline-block mt-1 px-2 py-1 text-white text-xs rounded-full bg-gradient-to-r from-blue-500 to-purple-600">
-                            {(session.user as any).role}
+                            {(session.user as { role?: string }).role}
                           </span>
                         )}
                       </div>
@@ -107,7 +111,7 @@ export default function NavBar() {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link href="/login" className="text-white hover:text-blue-300 font-medium transition-colors">
+                <Link href="/login" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
                   Sign In
                 </Link>
                 <Link 

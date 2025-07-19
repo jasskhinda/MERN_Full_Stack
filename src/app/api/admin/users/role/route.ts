@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
   
-  if (!session || (session.user as any).role !== "admin") {
+  if (!session || (session.user as { role?: string }).role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
@@ -18,7 +18,7 @@ export async function PATCH(req: Request) {
   }
 
   // Prevent self-demotion
-  if ((session.user as any).id === userId && newRole !== "admin") {
+  if ((session.user as { id?: string }).id === userId && newRole !== "admin") {
     return NextResponse.json(
       { error: "Admins cannot demote themselves" },
       { status: 400 }
@@ -52,7 +52,7 @@ export async function PATCH(req: Request) {
   // Log the audit event
   const { logAuditEvent } = await import("@/lib/audit");
   await logAuditEvent({
-    actorId: (session.user as any).id,
+    actorId: (session.user as { id?: string }).id || "",
     action: "UPDATE_ROLE",
     targetUserId: userId,
     details: {

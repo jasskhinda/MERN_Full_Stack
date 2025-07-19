@@ -27,8 +27,8 @@ export default function HomePage() {
             
             {/* Description */}
             <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-              A production-grade full-stack application built with MongoDB, Express.js (Next.js), React, and Node.js. 
-              Featuring modern authentication, role-based access control, and a beautiful user interface.
+              This is a collaborative student project where we learned and implemented modern full-stack web development. 
+              Built using the MERN stack with Next.js, MongoDB, authentication systems, and professional UI design.
             </p>
 
             {/* CTA Buttons */}
@@ -69,7 +69,7 @@ export default function HomePage() {
               Powerful Features
             </h2>
             <p className="text-white/80 text-lg max-w-2xl mx-auto">
-              Built with modern technologies and best practices for enterprise-grade applications
+              Developed as a learning project following modern web development practices and industry standards
             </p>
           </div>
 
@@ -155,7 +155,7 @@ export default function HomePage() {
                 Ready to Get Started?
               </h2>
               <p className="text-white/80 text-lg mb-8">
-                Join thousands of developers building amazing applications with our modern MERN stack
+                Explore our student project showcasing modern full-stack development with the MERN stack
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link 

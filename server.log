@@ -43,3 +43,80 @@
  ✓ Compiled /middleware in 349ms (210 modules)
  ✓ Compiled /dashboard in 195ms (958 modules)
  GET /dashboard 200 in 233ms
+ ✓ Compiled in 330ms (716 modules)
+ GET /dashboard 200 in 124ms
+ ✓ Compiled /api/auth/[...nextauth] in 159ms (674 modules)
+ GET /api/auth/session 200 in 307ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled /_not-found in 319ms (947 modules)
+ GET /settings 404 in 388ms
+ GET /settings 404 in 112ms
+ GET /api/auth/session 200 in 48ms
+ GET /api/auth/session 200 in 5ms
+ GET /dashboard 200 in 48ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled in 306ms (961 modules)
+ GET /dashboard 200 in 54ms
+ ✓ Compiled in 246ms (961 modules)
+ GET /dashboard 200 in 39ms
+ GET /profile 404 in 17ms
+ GET /profile 404 in 89ms
+ GET /api/auth/session 200 in 25ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled in 193ms (961 modules)
+ GET /profile 404 in 33ms
+ GET /profile 404 in 50ms
+ GET /api/auth/session 200 in 27ms
+ GET /api/auth/session 200 in 5ms
+ ✓ Compiled in 175ms (961 modules)
+ GET /profile 404 in 34ms
+ GET /profile 404 in 49ms
+ GET /api/auth/session 200 in 24ms
+ GET /api/auth/session 200 in 6ms
+ ✓ Compiled in 142ms (282 modules)
+ ✓ Compiled /_not-found in 340ms (917 modules)
+ GET /profile 404 in 476ms
+ ✓ Compiled /profile in 277ms (714 modules)
+ GET /profile 200 in 338ms
+ GET /profile 200 in 11ms
+ GET /profile 200 in 113ms
+ ✓ Compiled /api/auth/[...nextauth] in 100ms (680 modules)
+ GET /api/auth/session 200 in 254ms
+ GET /api/auth/session 200 in 6ms
+ GET /api/auth/session 200 in 12ms
+ GET /api/auth/session 200 in 6ms
+ GET /dashboard 200 in 55ms
+ ✓ Compiled /about in 364ms (951 modules)
+ GET /about 200 in 443ms
+ GET / 200 in 16ms
+ GET /about 200 in 19ms
+ GET /about 200 in 13ms
+ ✓ Compiled in 618ms (932 modules)
+ GET /about 200 in 463ms
+ GET /about 200 in 9ms
+ GET /about 200 in 12ms
+ GET /dashboard 200 in 18ms
+ ✓ Compiled /api/auth/[...nextauth] in 97ms (676 modules)
+ GET /api/auth/csrf 200 in 238ms
+ POST /api/auth/signout 200 in 7ms
+ GET /api/auth/session 200 in 5ms
+ ✓ Compiled in 96ms (284 modules)
+ ✓ Compiled in 174ms (1156 modules)
+ ✓ Compiled in 108ms (284 modules)
+ ✓ Compiled in 135ms (918 modules)
+ ✓ Compiled in 312ms (722 modules)
+ ✓ Compiled in 305ms (722 modules)
+ ✓ Compiled in 162ms (284 modules)
+ ✓ Compiled in 85ms (284 modules)
+ ✓ Compiled in 76ms (284 modules)
+ ✓ Compiled in 82ms (284 modules)
+ ✓ Compiled in 71ms (284 modules)
+ ✓ Compiled in 214ms (722 modules)
+ ✓ Compiled in 310ms (722 modules)
+ ✓ Compiled in 82ms (284 modules)
+ ✓ Compiled in 79ms (284 modules)
+ ✓ Compiled in 72ms (284 modules)
+ ✓ Compiled in 73ms (284 modules)
+ ✓ Compiled in 72ms (284 modules)
+ ✓ Compiled in 74ms (284 modules)

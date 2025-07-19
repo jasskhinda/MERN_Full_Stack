@@ -1,125 +1,62 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
-
-const stats = [
-  { 
-    name: 'Total Sessions', 
-    value: '12', 
-    change: '+12%', 
-    icon: '📊',
-    color: 'from-blue-500 to-cyan-500'
-  },
-  { 
-    name: 'Active Time', 
-    value: '2.4h', 
-    change: '+8%', 
-    icon: '⏱️',
-    color: 'from-purple-500 to-pink-500'
-  },
-  { 
-    name: 'Profile Views', 
-    value: '48', 
-    change: '+23%', 
-    icon: '👁️',
-    color: 'from-green-500 to-emerald-500'
-  },
-  { 
-    name: 'Account Score', 
-    value: '98%', 
-    change: '+2%', 
-    icon: '🎯',
-    color: 'from-orange-500 to-red-500'
-  },
-];
-
-const recentActivity = [
-  { action: 'Profile updated', time: '2 hours ago', type: 'success' },
-  { action: 'Password changed', time: '1 day ago', type: 'warning' },
-  { action: 'New login from Chrome', time: '2 days ago', type: 'info' },
-  { action: 'Account verified', time: '3 days ago', type: 'success' },
-];
+import Link from "next/link";
+import { useState } from "react";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const [stats] = useState({
+    totalUsers: 1,
+    activeProjects: 3,
+    completedTasks: 12,
+    pendingTasks: 5
+  });
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white"></div>
-          <p className="text-white/90 mt-4 font-medium">Loading your dashboard...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center">
+        <div className="text-white text-lg">Loading your dashboard...</div>
       </div>
     );
   }
 
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="glass rounded-2xl p-8 text-center">
-          <div className="text-6xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
-          <p className="text-white/70">Please sign in to access your dashboard.</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center">
+        <div className="text-red-300 text-lg">Access denied. Please log in.</div>
       </div>
     );
   }
 
-  const userInitials = session.user?.name?.split(' ').map(n => n[0]).join('') || 
-                      session.user?.email?.charAt(0).toUpperCase() || 'U';
-
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Welcome Header */}
         <div className="mb-8">
-          <div className="glass rounded-2xl p-6 card-hover">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
-                  <span className="text-white font-bold text-2xl">{userInitials}</span>
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-white text-shadow-lg">
-                    Welcome back, {session.user?.name?.split(' ')[0] || session.user?.email?.split('@')[0]}! 👋
-                  </h1>
-                  <p className="text-white/70 mt-1">
-                    {session.user?.email} • {(session.user as any)?.role || 'User'}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-white/70 text-sm">Current Time</p>
-                <p className="text-white font-mono text-lg">
-                  {currentTime.toLocaleTimeString()}
-                </p>
-              </div>
-            </div>
-          </div>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            Welcome back, {session.user?.name || session.user?.email?.split('@')[0]}! 👋
+          </h1>
+          <p className="text-white/80 text-lg">
+            Here's what's happening with your account today.
+          </p>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <div key={stat.name} className="glass rounded-2xl p-6 card-hover">
+          {[
+            { label: "Total Users", value: stats.totalUsers, icon: "👥", color: "from-blue-500 to-cyan-500" },
+            { label: "Active Projects", value: stats.activeProjects, icon: "🚀", color: "from-green-500 to-emerald-500" },
+            { label: "Completed Tasks", value: stats.completedTasks, icon: "✅", color: "from-purple-500 to-pink-500" },
+            { label: "Pending Tasks", value: stats.pendingTasks, icon: "⏳", color: "from-orange-500 to-red-500" },
+          ].map((stat, index) => (
+            <div key={index} className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 hover:bg-white/20 transition-all duration-300">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white/70 text-sm font-medium">{stat.name}</p>
-                  <p className="text-3xl font-bold text-white mt-2">{stat.value}</p>
-                  <div className="flex items-center mt-2">
-                    <span className="text-green-400 text-sm font-medium">{stat.change}</span>
-                    <span className="text-white/50 text-sm ml-1">vs last month</span>
-                  </div>
+                  <p className="text-white/70 text-sm font-medium">{stat.label}</p>
+                  <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
                 </div>
-                <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
+                <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${stat.color} flex items-center justify-center text-2xl`}>
                   {stat.icon}
                 </div>
               </div>
@@ -127,90 +64,116 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Recent Activity */}
-          <div className="glass rounded-2xl p-6 card-hover">
-            <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-              <span className="mr-2">📋</span>
-              Recent Activity
-            </h3>
-            <div className="space-y-4">
-              {recentActivity.map((activity, index) => (
-                <div key={index} className="flex items-center space-x-4 p-3 bg-white/5 rounded-xl">
-                  <div className={`w-3 h-3 rounded-full ${
-                    activity.type === 'success' ? 'bg-green-400' :
-                    activity.type === 'warning' ? 'bg-yellow-400' :
-                    'bg-blue-400'
-                  }`}></div>
-                  <div className="flex-1">
-                    <p className="text-white font-medium">{activity.action}</p>
-                    <p className="text-white/50 text-sm">{activity.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Quick Actions */}
-          <div className="glass rounded-2xl p-6 card-hover">
-            <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-              <span className="mr-2">⚡</span>
-              Quick Actions
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200 btn-hover shadow-lg">
-                <div className="text-2xl mb-2">👤</div>
-                Edit Profile
-              </button>
-              <button className="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 rounded-xl font-medium hover:from-green-600 hover:to-emerald-700 transition-all duration-200 btn-hover shadow-lg">
-                <div className="text-2xl mb-2">🔒</div>
-                Security
-              </button>
-              <button className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-4 rounded-xl font-medium hover:from-purple-600 hover:to-pink-700 transition-all duration-200 btn-hover shadow-lg">
-                <div className="text-2xl mb-2">📊</div>
-                Analytics
-              </button>
-              <button className="bg-gradient-to-r from-orange-500 to-red-600 text-white p-4 rounded-xl font-medium hover:from-orange-600 hover:to-red-700 transition-all duration-200 btn-hover shadow-lg">
-                <div className="text-2xl mb-2">⚙️</div>
-                Settings
-              </button>
+          <div className="lg:col-span-1">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-white mb-4">⚡ Quick Actions</h2>
+              <div className="space-y-3">
+                {[
+                  { icon: "👤", label: "Edit Profile", href: "/profile", description: "Update your personal information" },
+                  { icon: "🔒", label: "Security", href: "/security", description: "Manage passwords and 2FA" },
+                  { icon: "📊", label: "Analytics", href: "/analytics", description: "View your usage statistics" },
+                  { icon: "⚙️", label: "Settings", href: "/settings", description: "Configure your preferences" },
+                ].map((action, index) => (
+                  <Link
+                    key={index}
+                    href={action.href}
+                    className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200 group border border-white/10"
+                  >
+                    <span className="text-2xl">{action.icon}</span>
+                    <div>
+                      <p className="text-white font-medium group-hover:text-blue-300 transition-colors">{action.label}</p>
+                      <p className="text-white/60 text-xs">{action.description}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="lg:col-span-2">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-white mb-4">📈 Recent Activity</h2>
+              <div className="space-y-4">
+                {[
+                  { action: "Logged in", time: "2 minutes ago", icon: "🔐" },
+                  { action: "Updated profile", time: "1 hour ago", icon: "👤" },
+                  { action: "Completed project", time: "3 hours ago", icon: "✅" },
+                  { action: "Created new task", time: "1 day ago", icon: "📝" },
+                ].map((activity) => (
+                  <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-xl">{activity.icon}</span>
+                      <span className="text-white">{activity.action}</span>
+                    </div>
+                    <span className="text-white/60 text-sm">{activity.time}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Account Overview */}
+        {/* User Info Card */}
         <div className="mt-8">
-          <div className="glass rounded-2xl p-6 card-hover">
-            <h3 className="text-xl font-bold text-white mb-6 flex items-center">
-              <span className="mr-2">🏠</span>
-              Account Overview
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <span className="text-white text-3xl">🎯</span>
-                </div>
-                <h4 className="text-white font-semibold">Account Status</h4>
-                <p className="text-green-400 font-medium">Active & Verified</p>
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
+            <h2 className="text-xl font-semibold text-white mb-4">👤 Account Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/70 text-sm font-medium mb-1">Email</label>
+                <p className="text-white bg-white/5 rounded-lg px-3 py-2 border border-white/10">{session.user?.email}</p>
               </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <span className="text-white text-3xl">🛡️</span>
-                </div>
-                <h4 className="text-white font-semibold">Security Level</h4>
-                <p className="text-green-400 font-medium">High Security</p>
+              <div>
+                <label className="block text-white/70 text-sm font-medium mb-1">Role</label>
+                <p className="text-white bg-white/5 rounded-lg px-3 py-2 border border-white/10 capitalize">
+                  {(session.user as { role?: string })?.role || 'user'}
+                </p>
               </div>
-              <div className="text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-                  <span className="text-white text-3xl">⭐</span>
-                </div>
-                <h4 className="text-white font-semibold">Member Since</h4>
-                <p className="text-white/70">January 2025</p>
+              <div>
+                <label className="block text-white/70 text-sm font-medium mb-1">Name</label>
+                <p className="text-white bg-white/5 rounded-lg px-3 py-2 border border-white/10">
+                  {session.user?.name || 'Not set'}
+                </p>
+              </div>
+              <div>
+                <label className="block text-white/70 text-sm font-medium mb-1">Account Status</label>
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-500/20 text-green-300 border border-green-500/30">
+                  ✅ Active
+                </span>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Admin Panel Link */}
+        {(session.user as { role?: string })?.role === 'admin' && (
+          <div className="mt-8">
+            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-purple-300/30 rounded-xl p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">🔧 Administrator Panel</h3>
+                  <p className="text-white/70">Manage users, view audit logs, and system settings.</p>
+                </div>
+                <div className="space-x-4">
+                  <Link 
+                    href="/admin/users"
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105"
+                  >
+                    Manage Users
+                  </Link>
+                  <Link 
+                    href="/admin/audit"
+                    className="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 border border-white/20"
+                  >
+                    Audit Logs
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

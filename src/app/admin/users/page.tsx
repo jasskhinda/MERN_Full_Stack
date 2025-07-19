@@ -89,7 +89,7 @@ export default function AdminUserPage() {
               <td className="py-2 px-3">{user.email}</td>
               <td className="py-2 px-3">{user.name}</td>
               <td className="py-2 px-3">
-                <RoleControl user={user} currentUserId={(session?.user as any)?.id || ""} />
+                <RoleControl user={user} currentUserId={(session?.user as { id?: string })?.id || ""} />
               </td>
             </tr>
           ))}
