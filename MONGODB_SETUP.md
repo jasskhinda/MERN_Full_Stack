@@ -36,11 +36,41 @@ If you prefer using a cloud database:
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/fullstack-app?retryWrites=true&w=majority
 ```
 
+## Production Deployment (Vercel)
+
+For your Vercel deployment to work, you **MUST** use MongoDB Atlas:
+
+1. **Create MongoDB Atlas Account**
+   - Go to [MongoDB Atlas](https://cloud.mongodb.com/)
+   - Create a free cluster
+   - Get your connection string
+
+2. **Configure Vercel Environment Variables**
+   - Go to your Vercel project dashboard
+   - Navigate to Settings → Environment Variables
+   - Add these variables:
+   ```
+   MONGODB_URI = mongodb+srv://username:password@cluster.mongodb.net/fullstack-app
+   NEXTAUTH_SECRET = your-secure-random-string-here
+   NEXTAUTH_URL = https://mern-full-stack-puce.vercel.app
+   ```
+
+3. **Redeploy your application** after adding environment variables
+
 ## Verification
 
 Test that MongoDB is working:
+
+**Local:**
 ```bash
 curl -X POST http://localhost:3000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@example.com","password":"password123"}'
+```
+
+**Production:**
+```bash
+curl -X POST https://mern-full-stack-puce.vercel.app/api/register \
   -H "Content-Type: application/json" \
   -d '{"name":"Test User","email":"test@example.com","password":"password123"}'
 ```
