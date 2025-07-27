@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import clientPromise from '@/lib/mongodb';
+import { ObjectId } from 'mongodb';
 
 export async function GET() {
   try {
@@ -19,8 +20,18 @@ export async function GET() {
     
     // Get user's recent activity
     const userId = (session.user as { id: string }).id;
+    
+    // Find user to get correct ID for audit logs
+    let user = null;
+    try {
+      user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+    } catch (error) {
+      user = await db.collection('users').findOne({ email: session.user.email });
+    }
+    
+    const searchId = user ? user._id.toString() : userId;
     const recentActivity = await db.collection('audit_logs')
-      .find({ actorId: userId })
+      .find({ actorId: searchId })
       .sort({ timestamp: -1 })
       .limit(4)
       .toArray();

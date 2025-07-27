@@ -24,9 +24,28 @@ export async function PUT(request: NextRequest) {
     
     const userId = (session.user as { id: string }).id;
     
+    // First try to find user by ObjectId, then by email
+    let user = null;
+    let updateQuery = {};
+    
+    try {
+      user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
+      updateQuery = { _id: new ObjectId(userId) };
+    } catch (error) {
+      // If ObjectId fails, try by email
+      user = await db.collection('users').findOne({ email: session.user.email });
+      if (user) {
+        updateQuery = { email: session.user.email };
+      }
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found in database' }, { status: 404 });
+    }
+
     // Update user name
     const result = await db.collection('users').updateOne(
-      { _id: new ObjectId(userId) },
+      updateQuery,
       { 
         $set: { 
           name: name.trim(),
@@ -36,15 +55,15 @@ export async function PUT(request: NextRequest) {
     );
 
     if (result.matchedCount === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Failed to update user' }, { status: 404 });
     }
 
     // Log the profile update
     try {
       await db.collection('audit_logs').insertOne({
         timestamp: new Date(),
-        actorId: userId,
-        targetUserId: userId,
+        actorId: user._id.toString(),
+        targetUserId: user._id.toString(),
         action: 'profile_update',
         details: { field: 'name', newValue: name.trim() }
       });
