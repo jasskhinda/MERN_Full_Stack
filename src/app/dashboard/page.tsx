@@ -49,8 +49,9 @@ export default function DashboardPage() {
             setRecentActivity(formattedActivity);
           } else {
             setRecentActivity([
-              { action: "Account created", time: "Today", icon: "🎉" },
-              { action: "Logged in", time: "Just now", icon: "🔐" }
+              { action: "Account created", time: "Recently", icon: "🎉" },
+              { action: "Logged in", time: "Just now", icon: "🔐" },
+              { action: "Ready to use features", time: "", icon: "🚀" }
             ]);
           }
         }

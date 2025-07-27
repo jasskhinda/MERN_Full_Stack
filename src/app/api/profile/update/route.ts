@@ -71,7 +71,11 @@ export async function PUT(request: NextRequest) {
       console.log('Audit logging failed:', auditError);
     }
 
-    return NextResponse.json({ message: 'Profile updated successfully' });
+    return NextResponse.json({ 
+      message: 'Profile updated successfully',
+      updatedName: name.trim(),
+      userId: user._id.toString()
+    });
   } catch (error) {
     console.error('Profile update error:', error);
     return NextResponse.json(

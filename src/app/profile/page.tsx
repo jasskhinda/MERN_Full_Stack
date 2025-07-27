@@ -42,12 +42,16 @@ export default function ProfilePage() {
       });
 
       if (response.ok) {
-        setMessage('Profile updated successfully!');
+        const result = await response.json();
+        setMessage('✅ Profile updated successfully!');
         // Update the session with new name
         await update({ name: formData.name });
+        // Force page refresh to show updated data
+        window.location.reload();
       } else {
         const error = await response.json();
-        setMessage(error.error || 'Failed to update profile');
+        setMessage(`❌ ${error.error || 'Failed to update profile'}`);
+        console.error('Profile update error:', error);
       }
     } catch {
       setMessage('Network error. Please try again.');
