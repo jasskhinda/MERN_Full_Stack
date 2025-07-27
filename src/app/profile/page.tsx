@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const fetchProfileData = async () => {
+  const fetchProfileData = useCallback(async () => {
     try {
       const response = await fetch('/api/profile');
       if (response.ok) {
@@ -42,7 +42,7 @@ export default function ProfilePage() {
         website: ''
       });
     }
-  };
+  }, [session?.user?.name, session?.user?.email]);
 
   useEffect(() => {
     if (session?.user) {
