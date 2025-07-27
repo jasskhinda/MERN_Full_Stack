@@ -17,15 +17,38 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (session?.user) {
+      fetchProfileData();
+    }
+  }, [session]);
+
+  const fetchProfileData = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const profileData = await response.json();
+        setFormData(profileData);
+      } else {
+        // Fallback to session data
+        setFormData({
+          name: session?.user?.name || '',
+          email: session?.user?.email || '',
+          bio: '',
+          location: '',
+          website: ''
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch profile data:', error);
+      // Fallback to session data
       setFormData({
-        name: session.user.name || '',
-        email: session.user.email || '',
+        name: session?.user?.name || '',
+        email: session?.user?.email || '',
         bio: '',
         location: '',
         website: ''
       });
     }
-  }, [session]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +61,12 @@ export default function ProfilePage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: formData.name }),
+        body: JSON.stringify({ 
+          name: formData.name,
+          bio: formData.bio,
+          location: formData.location,
+          website: formData.website
+        }),
       });
 
       if (response.ok) {
@@ -46,8 +74,8 @@ export default function ProfilePage() {
         setMessage('✅ Profile updated successfully!');
         // Update the session with new name
         await update({ name: formData.name });
-        // Force page refresh to show updated data
-        window.location.reload();
+        // Refresh profile data to show updated values
+        await fetchProfileData();
       } else {
         const error = await response.json();
         setMessage(`❌ ${error.error || 'Failed to update profile'}`);

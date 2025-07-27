@@ -13,7 +13,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name } = await request.json();
+    const { name, bio, location, website } = await request.json();
 
     if (!name || name.trim().length === 0) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -43,15 +43,26 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'User not found in database' }, { status: 404 });
     }
 
-    // Update user name
+    // Update user profile
+    const updateData: any = {
+      name: name.trim(),
+      updatedAt: new Date()
+    };
+
+    // Only update fields that are provided and not empty
+    if (bio !== undefined && bio.trim() !== '') {
+      updateData.bio = bio.trim();
+    }
+    if (location !== undefined && location.trim() !== '') {
+      updateData.location = location.trim();
+    }
+    if (website !== undefined && website.trim() !== '') {
+      updateData.website = website.trim();
+    }
+
     const result = await db.collection('users').updateOne(
       updateQuery,
-      { 
-        $set: { 
-          name: name.trim(),
-          updatedAt: new Date()
-        } 
-      }
+      { $set: updateData }
     );
 
     if (result.matchedCount === 0) {
@@ -65,7 +76,7 @@ export async function PUT(request: NextRequest) {
         actorId: user._id.toString(),
         targetUserId: user._id.toString(),
         action: 'profile_update',
-        details: { field: 'name', newValue: name.trim() }
+        details: { fields: updateData }
       });
     } catch (auditError) {
       console.log('Audit logging failed:', auditError);
@@ -73,7 +84,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ 
       message: 'Profile updated successfully',
-      updatedName: name.trim(),
+      updatedFields: updateData,
       userId: user._id.toString()
     });
   } catch (error) {
