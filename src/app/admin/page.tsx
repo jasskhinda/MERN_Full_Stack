@@ -218,6 +218,22 @@ export default function AdminDashboard() {
               </Link>
 
               <Link
+                href="/admin/settings"
+                className="flex items-center justify-between p-4 bg-yellow-500/20 hover:bg-yellow-500/30 rounded-lg border border-yellow-500/30 transition-all duration-200 group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-yellow-500/30 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <span className="text-xl">⚙️</span>
+                  </div>
+                  <div>
+                    <div className="text-white font-semibold">System Settings</div>
+                    <div className="text-yellow-300 text-sm">Configure system preferences</div>
+                  </div>
+                </div>
+                <div className="text-yellow-400">→</div>
+              </Link>
+
+              <Link
                 href="/dashboard"
                 className="flex items-center justify-between p-4 bg-green-500/20 hover:bg-green-500/30 rounded-lg border border-green-500/30 transition-all duration-200 group"
               >
