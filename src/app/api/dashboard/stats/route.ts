@@ -16,11 +16,6 @@ export async function GET() {
     
     // Get real stats
     const totalUsers = await db.collection('users').countDocuments();
-    const auditLogs = await db.collection('audit_logs')
-      .find({ actorId: session.user.id })
-      .sort({ timestamp: -1 })
-      .limit(10)
-      .toArray();
     
     // Get user's recent activity
     const recentActivity = await db.collection('audit_logs')

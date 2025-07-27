@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
-import { logAuditAction } from '@/lib/audit';
+// import { logAuditAction } from '@/lib/audit';
 
 export async function PUT(request: NextRequest) {
   try {
@@ -38,12 +38,18 @@ export async function PUT(request: NextRequest) {
     }
 
     // Log the profile update
-    await logAuditAction(
-      session.user.id,
-      session.user.id,
-      'profile_update',
-      { field: 'name', newValue: name.trim() }
-    );
+    try {
+      const db = client.db('fullstack_app');
+      await db.collection('audit_logs').insertOne({
+        timestamp: new Date(),
+        actorId: session.user.id,
+        targetUserId: session.user.id,
+        action: 'profile_update',
+        details: { field: 'name', newValue: name.trim() }
+      });
+    } catch (auditError) {
+      console.log('Audit logging failed:', auditError);
+    }
 
     return NextResponse.json({ message: 'Profile updated successfully' });
   } catch (error) {

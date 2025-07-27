@@ -49,7 +49,7 @@ export default function ProfilePage() {
         const error = await response.json();
         setMessage(error.error || 'Failed to update profile');
       }
-    } catch (error) {
+    } catch {
       setMessage('Network error. Please try again.');
     } finally {
       setIsLoading(false);

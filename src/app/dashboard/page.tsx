@@ -15,12 +15,15 @@ export default function DashboardPage() {
   const [recentActivity, setRecentActivity] = useState([
     { action: "Loading...", time: "", icon: "⏳" }
   ]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (session) {
-      fetchDashboardData();
-    }
+    const fetchData = async () => {
+      if (session) {
+        await fetchDashboardData();
+      }
+    };
+    fetchData();
   }, [session]);
 
   const fetchDashboardData = async () => {
@@ -31,7 +34,7 @@ export default function DashboardPage() {
         setStats(data.stats);
         
         // Format recent activity
-        const formattedActivity = data.recentActivity.map((activity: any) => ({
+        const formattedActivity = data.recentActivity.map((activity: {action: string; timestamp: string}) => ({
           action: activity.action || "Activity",
           time: new Date(activity.timestamp).toLocaleString(),
           icon: getActivityIcon(activity.action)
@@ -49,7 +52,7 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
