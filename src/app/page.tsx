@@ -34,12 +34,22 @@ export default function HomePage() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {session ? (
-                <Link 
-                  href="/dashboard" 
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
-                >
-                  Go to Dashboard →
-                </Link>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link 
+                    href="/dashboard" 
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  >
+                    Go to Dashboard →
+                  </Link>
+                  {(session.user as { role?: string })?.role === 'admin' && (
+                    <Link 
+                      href="/admin" 
+                      className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg border-2 border-red-400 animate-pulse"
+                    >
+                      🛡️ ADMIN PANEL
+                    </Link>
+                  )}
+                </div>
               ) : (
                 <>
                   <Link 

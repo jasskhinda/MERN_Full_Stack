@@ -1,15 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import DataInput from '@/components/stock-predictor/DataInput';
 import PredictionModel from '@/components/stock-predictor/PredictionModel';
 import StockChart from '@/components/stock-predictor/StockChart';
+import RealTimeTicker from '@/components/stock-predictor/RealTimeTicker';
 import { stockData as defaultStockData } from '@/lib/stockData';
 
 export default function StockPredictor() {
   const [stockData, setStockData] = useState(defaultStockData);
   const [predictions, setPredictions] = useState<Array<{ date: string; price: number; isPrediction: boolean }>>([]);
   const [isTraining, setIsTraining] = useState(false);
+  const [selectedStock, setSelectedStock] = useState('AAPL');
+
+  const handleStockSelect = useCallback(async (symbol: string) => {
+    setSelectedStock(symbol);
+    setPredictions([]); // Clear previous predictions
+    
+    try {
+      // Fetch historical data for the selected stock
+      const response = await fetch(`/api/stocks/realtime?symbol=${symbol}&type=historical&days=30`);
+      if (response.ok) {
+        const result = await response.json();
+        setStockData(result.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch historical data:', error);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
@@ -22,6 +40,14 @@ export default function StockPredictor() {
             Harness the power of neural networks to predict stock market trends
           </p>
         </header>
+
+        {/* Real-Time Market Data */}
+        <div className="mb-8">
+          <RealTimeTicker 
+            onStockSelect={handleStockSelect}
+            selectedStock={selectedStock}
+          />
+        </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">

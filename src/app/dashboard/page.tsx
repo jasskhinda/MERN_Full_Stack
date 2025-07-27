@@ -199,24 +199,30 @@ export default function DashboardPage() {
         {/* Admin Panel Link */}
         {(session.user as { role?: string })?.role === 'admin' && (
           <div className="mt-8">
-            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-purple-300/30 rounded-xl p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">🔧 Administrator Panel</h3>
-                  <p className="text-white/70">Manage users, view audit logs, and system settings.</p>
-                </div>
-                <div className="space-x-4">
+            <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 backdrop-blur-md border border-red-400/50 rounded-xl p-8 shadow-2xl">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🛡️</div>
+                <h3 className="text-3xl font-bold text-white mb-3">ADMINISTRATOR CONTROL PANEL</h3>
+                <p className="text-white/80 text-lg mb-6">Full system administration and user management access</p>
+                <Link 
+                  href="/admin"
+                  className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-xl border border-red-400"
+                >
+                  🚀 ENTER ADMIN PANEL
+                </Link>
+                <div className="mt-4 flex justify-center space-x-4 text-sm">
                   <Link 
                     href="/admin/users"
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105"
+                    className="text-red-300 hover:text-white transition-colors"
                   >
-                    Manage Users
+                    👥 User Management
                   </Link>
+                  <span className="text-white/30">|</span>
                   <Link 
                     href="/admin/audit"
-                    className="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 border border-white/20"
+                    className="text-orange-300 hover:text-white transition-colors"
                   >
-                    Audit Logs
+                    📋 Audit Logs
                   </Link>
                 </div>
               </div>
