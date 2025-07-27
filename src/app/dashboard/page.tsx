@@ -2,16 +2,69 @@
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
-  const [stats] = useState({
-    totalUsers: 1,
-    activeProjects: 3,
-    completedTasks: 12,
-    pendingTasks: 5
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    activeProjects: 0,
+    completedTasks: 0,
+    pendingTasks: 0
   });
+  const [recentActivity, setRecentActivity] = useState([
+    { action: "Loading...", time: "", icon: "⏳" }
+  ]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (session) {
+      fetchDashboardData();
+    }
+  }, [session]);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats');
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data.stats);
+        
+        // Format recent activity
+        const formattedActivity = data.recentActivity.map((activity: any) => ({
+          action: activity.action || "Activity",
+          time: new Date(activity.timestamp).toLocaleString(),
+          icon: getActivityIcon(activity.action)
+        }));
+        
+        if (formattedActivity.length > 0) {
+          setRecentActivity(formattedActivity);
+        } else {
+          setRecentActivity([
+            { action: "Account created", time: "Today", icon: "🎉" },
+            { action: "Logged in", time: "Just now", icon: "🔐" }
+          ]);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getActivityIcon = (action: string) => {
+    const iconMap: { [key: string]: string } = {
+      'login': '🔐',
+      'logout': '🚪',
+      'update': '✏️',
+      'create': '➕',
+      'delete': '🗑️',
+      'role_change': '👤',
+      'password_reset': '🔑'
+    };
+    return iconMap[action.toLowerCase()] || '📝';
+  };
 
   if (status === "loading") {
     return (
@@ -97,12 +150,7 @@ export default function DashboardPage() {
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
               <h2 className="text-xl font-semibold text-white mb-4">📈 Recent Activity</h2>
               <div className="space-y-4">
-                {[
-                  { action: "Logged in", time: "2 minutes ago", icon: "🔐" },
-                  { action: "Updated profile", time: "1 hour ago", icon: "👤" },
-                  { action: "Completed project", time: "3 hours ago", icon: "✅" },
-                  { action: "Created new task", time: "1 day ago", icon: "📝" },
-                ].map((activity, index) => (
+                {recentActivity.map((activity, index) => (
                   <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-white/5 border border-white/10">
                     <div className="flex items-center space-x-3">
                       <span className="text-xl">{activity.icon}</span>

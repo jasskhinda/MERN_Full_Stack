@@ -1,22 +1,59 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ProfilePage() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [formData, setFormData] = useState({
-    name: session?.user?.name || '',
-    email: session?.user?.email || '',
+    name: '',
+    email: '',
     bio: '',
     location: '',
     website: ''
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData({
+        name: session.user.name || '',
+        email: session.user.email || '',
+        bio: '',
+        location: '',
+        website: ''
+      });
+    }
+  }, [session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add profile update logic here
-    alert('Profile updated successfully!');
+    setIsLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('/api/profile/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: formData.name }),
+      });
+
+      if (response.ok) {
+        setMessage('Profile updated successfully!');
+        // Update the session with new name
+        await update({ name: formData.name });
+      } else {
+        const error = await response.json();
+        setMessage(error.error || 'Failed to update profile');
+      }
+    } catch (error) {
+      setMessage('Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!session) {
@@ -58,6 +95,12 @@ export default function ProfilePage() {
           <div className="lg:col-span-2">
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
               <h2 className="text-xl font-semibold text-white mb-6">Personal Information</h2>
+              
+              {message && (
+                <div className={`p-4 rounded-lg ${message.includes('success') ? 'bg-green-500/20 border border-green-500/30 text-green-300' : 'bg-red-500/20 border border-red-500/30 text-red-300'}`}>
+                  {message}
+                </div>
+              )}
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -121,9 +164,10 @@ export default function ProfilePage() {
                 <div className="flex gap-4 pt-4">
                   <button
                     type="submit"
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105"
+                    disabled={isLoading}
+                    className={`${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700'} text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105`}
                   >
-                    Save Changes
+                    {isLoading ? 'Saving...' : 'Save Changes'}
                   </button>
                   <button
                     type="button"
