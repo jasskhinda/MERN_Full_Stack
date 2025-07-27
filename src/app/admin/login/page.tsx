@@ -88,6 +88,18 @@ export default function AdminLogin() {
           </p>
         </div>
 
+        {/* Demo Admin Credentials */}
+        <div className="bg-yellow-500/20 backdrop-blur-md border border-yellow-500/30 rounded-2xl p-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="text-2xl">💡</div>
+            <div className="text-yellow-200">
+              <p className="font-semibold">Demo Admin Account:</p>
+              <p className="text-sm">📧 Email: admin@mernstack.com</p>
+              <p className="text-sm">🔑 Password: Admin@123!</p>
+            </div>
+          </div>
+        </div>
+
         {/* Login Form */}
         <div className="bg-black/40 backdrop-blur-lg border border-red-500/30 rounded-2xl p-8 shadow-2xl">
           <form onSubmit={handleSubmit} className="space-y-6">

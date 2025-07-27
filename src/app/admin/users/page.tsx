@@ -16,54 +16,23 @@ interface DeleteConfirmation {
   isOpen: boolean;
 }
 
-function RoleControl({ user, currentUserId, onUpdate }: { 
+function RoleDisplay({ user, currentUserId }: { 
   user: User; 
-  currentUserId: string; 
-  onUpdate: () => void;
+  currentUserId: string;
 }) {
-  const [updating, setUpdating] = useState(false);
-  const [role, setRole] = useState(user.role);
-
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newRole = e.target.value;
-    setUpdating(true);
-    
-    const res = await fetch("/api/admin/users/role", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user._id, newRole }),
-    });
-
-    if (res.ok) {
-      setRole(newRole);
-      onUpdate(); // Refresh the user list
-    } else {
-      const error = await res.json();
-      alert(error.error);
-      e.target.value = role;
-    }
-    
-    setUpdating(false);
-  };
-
   const isSelf = user._id === currentUserId;
 
   return (
     <div className="flex items-center gap-2">
-      <select
-        value={role}
-        onChange={handleChange}
-        disabled={updating}
-        className="bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-      >
-        <option value="user" className="bg-gray-800 text-white">User</option>
-        <option value="admin" className="bg-gray-800 text-white">Admin</option>
-      </select>
-      {isSelf && role === "admin" && (
-        <span className="text-xs text-blue-300">(You)</span>
-      )}
-      {updating && (
-        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+        user.role === 'admin' 
+          ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
+          : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+      }`}>
+        {user.role === 'admin' ? '👑 Admin' : '👤 User'}
+      </span>
+      {isSelf && user.role === "admin" && (
+        <span className="text-xs text-purple-300">(You)</span>
       )}
     </div>
   );
@@ -196,9 +165,7 @@ export default function AdminUserPage() {
     }
 
     const actionNames = {
-      delete_multiple: "delete selected users",
-      promote_to_admin: "promote selected users to admin",
-      demote_to_user: "demote selected users to regular users"
+      delete_multiple: "delete selected users"
     };
 
     if (!confirm(`Are you sure you want to ${actionNames[action as keyof typeof actionNames]}?`)) {
@@ -250,20 +217,6 @@ export default function AdminUserPage() {
                   {selectedUsers.length} user{selectedUsers.length !== 1 ? 's' : ''} selected
                 </span>
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => handleBulkAction('promote_to_admin')}
-                    disabled={bulkLoading}
-                    className="bg-green-600 hover:bg-green-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    👑 Promote to Admin
-                  </button>
-                  <button
-                    onClick={() => handleBulkAction('demote_to_user')}
-                    disabled={bulkLoading}
-                    className="bg-orange-600 hover:bg-orange-700 text-white text-sm font-semibold py-2 px-3 rounded-lg transition-colors disabled:opacity-50"
-                  >
-                    👤 Demote to User
-                  </button>
                   <button
                     onClick={() => handleBulkAction('delete_multiple')}
                     disabled={bulkLoading}
@@ -369,31 +322,21 @@ export default function AdminUserPage() {
                         <span className="text-white">{user.name || 'Not set'}</span>
                       </td>
                       <td className="py-4 px-6">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                          user.role === 'admin' 
-                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
-                            : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                        }`}>
-                          {user.role === 'admin' ? '👑 Admin' : '👤 User'}
-                        </span>
+                        <RoleDisplay 
+                          user={user} 
+                          currentUserId={currentUserId}
+                        />
                       </td>
                       <td className="py-4 px-6">
-                        <div className="flex items-center gap-2">
-                          <RoleControl 
-                            user={user} 
-                            currentUserId={currentUserId} 
-                            onUpdate={fetchUsers}
-                          />
-                          {user._id !== currentUserId && (
-                            <button
-                              onClick={() => handleDeleteUser(user)}
-                              className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors text-sm"
-                              title="Delete User"
-                            >
-                              🗑️
-                            </button>
-                          )}
-                        </div>
+                        {user._id !== currentUserId && user.role !== 'admin' && (
+                          <button
+                            onClick={() => handleDeleteUser(user)}
+                            className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors text-sm"
+                            title="Delete User"
+                          >
+                            🗑️ Delete
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

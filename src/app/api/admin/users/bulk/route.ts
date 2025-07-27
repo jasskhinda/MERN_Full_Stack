@@ -64,31 +64,12 @@ export async function POST(request: NextRequest) {
         }));
         break;
 
+      // Admin promotion/demotion is disabled - only one admin allowed
       case 'promote_to_admin':
-        result = await db.collection('users').updateMany(
-          { _id: { $in: userIds.map(id => new ObjectId(id)) } },
-          { $set: { role: 'admin', updatedAt: new Date() } }
-        );
-        auditDetails.promotedUsers = userIds;
-        break;
-
       case 'demote_to_user':
-        // Prevent demoting yourself if you're the last admin
-        if (userIds.includes(currentUserId)) {
-          const adminCount = await db.collection('users').countDocuments({ role: 'admin' });
-          if (adminCount <= userIds.length) {
-            return NextResponse.json({ 
-              error: 'Cannot demote the last administrator' 
-            }, { status: 400 });
-          }
-        }
-
-        result = await db.collection('users').updateMany(
-          { _id: { $in: userIds.map(id => new ObjectId(id)) } },
-          { $set: { role: 'user', updatedAt: new Date() } }
-        );
-        auditDetails.demotedUsers = userIds;
-        break;
+        return NextResponse.json({ 
+          error: 'Role changes are not allowed. System maintains a single administrator.' 
+        }, { status: 403 });
 
       default:
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
