@@ -9,7 +9,7 @@ export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.id) {
+    if (!session?.user || !(session.user as { id?: string }).id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -22,9 +22,11 @@ export async function PUT(request: NextRequest) {
     const client = await clientPromise;
     const db = client.db('fullstack_app');
     
+    const userId = (session.user as { id: string }).id;
+    
     // Update user name
     const result = await db.collection('users').updateOne(
-      { _id: new ObjectId(session.user.id) },
+      { _id: new ObjectId(userId) },
       { 
         $set: { 
           name: name.trim(),
@@ -42,8 +44,8 @@ export async function PUT(request: NextRequest) {
       const db = client.db('fullstack_app');
       await db.collection('audit_logs').insertOne({
         timestamp: new Date(),
-        actorId: session.user.id,
-        targetUserId: session.user.id,
+        actorId: userId,
+        targetUserId: userId,
         action: 'profile_update',
         details: { field: 'name', newValue: name.trim() }
       });
