@@ -143,8 +143,8 @@ function StockChart({ stockData, predictions }: StockChartProps) {
         },
         ticks: {
           color: 'white',
-          callback: function(value: number) {
-            return '$' + value.toFixed(2);
+          callback: function(value: string | number) {
+            return '$' + Number(value).toFixed(2);
           }
         },
         grid: {
