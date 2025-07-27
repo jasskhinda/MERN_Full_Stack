@@ -18,6 +18,7 @@ A comprehensive full-stack web application built with MongoDB, Express.js (repla
 - **Audit Logging**: Track administrative actions for security and compliance
 - **Responsive Design**: Mobile-friendly UI with Tailwind CSS
 - **TypeScript**: Full type safety across the application
+- **AI Stock Predictor**: Neural network-based stock price prediction using Brain.js (Assignment 4 Integration)
 
 ## Tech Stack
 
@@ -25,6 +26,8 @@ A comprehensive full-stack web application built with MongoDB, Express.js (repla
 - **Backend**: Next.js API Routes (replacing Express.js)
 - **Database**: MongoDB with native driver
 - **Authentication**: NextAuth.js with Credentials and Google providers
+- **AI/ML**: Brain.js for neural network predictions
+- **Data Visualization**: Chart.js with react-chartjs-2
 - **Deployment**: Ready for Vercel or similar platforms
 
 ## Getting Started
@@ -92,6 +95,14 @@ src/
 - Promote/demote user roles
 - View audit logs of administrative actions
 - Protection against removing last admin
+
+### Stock Predictor (Assignment 4)
+- AI-powered stock price predictions using Brain.js neural network
+- Interactive data visualization with Chart.js
+- Customizable training parameters
+- Support for custom stock data upload (JSON format)
+- 10-day price forecast with trend analysis
+- Real-time training progress visualization
 
 ## Security Features
 
