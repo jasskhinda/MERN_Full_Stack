@@ -15,46 +15,7 @@ export default function DashboardPage() {
   const [recentActivity, setRecentActivity] = useState([
     { action: "Loading...", time: "", icon: "⏳" }
   ]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session) {
-        await fetchDashboardData();
-      }
-    };
-    fetchData();
-  }, [session]);
-
-  const fetchDashboardData = async () => {
-    try {
-      const response = await fetch('/api/dashboard/stats');
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data.stats);
-        
-        // Format recent activity
-        const formattedActivity = data.recentActivity.map((activity: {action: string; timestamp: string}) => ({
-          action: activity.action || "Activity",
-          time: new Date(activity.timestamp).toLocaleString(),
-          icon: getActivityIcon(activity.action)
-        }));
-        
-        if (formattedActivity.length > 0) {
-          setRecentActivity(formattedActivity);
-        } else {
-          setRecentActivity([
-            { action: "Account created", time: "Today", icon: "🎉" },
-            { action: "Logged in", time: "Just now", icon: "🔐" }
-          ]);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [, setIsLoading] = useState(true);
 
   const getActivityIcon = (action: string) => {
     const iconMap: { [key: string]: string } = {
@@ -68,6 +29,42 @@ export default function DashboardPage() {
     };
     return iconMap[action.toLowerCase()] || '📝';
   };
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch('/api/dashboard/stats');
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data.stats);
+          
+          // Format recent activity
+          const formattedActivity = data.recentActivity.map((activity: {action: string; timestamp: string}) => ({
+            action: activity.action || "Activity",
+            time: new Date(activity.timestamp).toLocaleString(),
+            icon: getActivityIcon(activity.action)
+          }));
+          
+          if (formattedActivity.length > 0) {
+            setRecentActivity(formattedActivity);
+          } else {
+            setRecentActivity([
+              { action: "Account created", time: "Today", icon: "🎉" },
+              { action: "Logged in", time: "Just now", icon: "🔐" }
+            ]);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (session) {
+      fetchDashboardData();
+    }
+  }, [session]);
 
   if (status === "loading") {
     return (
