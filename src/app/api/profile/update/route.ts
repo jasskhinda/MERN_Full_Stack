@@ -31,7 +31,7 @@ export async function PUT(request: NextRequest) {
     try {
       user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
       updateQuery = { _id: new ObjectId(userId) };
-    } catch (error) {
+    } catch {
       // If ObjectId fails, try by email
       user = await db.collection('users').findOne({ email: session.user.email });
       if (user) {
@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update user profile
-    const updateData: any = {
+    const updateData: Record<string, any> = {
       name: name.trim(),
       updatedAt: new Date()
     };

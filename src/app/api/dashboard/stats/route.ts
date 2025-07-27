@@ -25,7 +25,7 @@ export async function GET() {
     let user = null;
     try {
       user = await db.collection('users').findOne({ _id: new ObjectId(userId) });
-    } catch (error) {
+    } catch {
       user = await db.collection('users').findOne({ email: session.user.email });
     }
     

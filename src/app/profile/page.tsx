@@ -16,9 +16,12 @@ export default function ProfilePage() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (session?.user) {
-      fetchProfileData();
-    }
+    const loadProfile = async () => {
+      if (session?.user) {
+        await fetchProfileData();
+      }
+    };
+    loadProfile();
   }, [session]);
 
   const fetchProfileData = async () => {
@@ -70,7 +73,7 @@ export default function ProfilePage() {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         setMessage('✅ Profile updated successfully!');
         // Update the session with new name
         await update({ name: formData.name });
