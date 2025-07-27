@@ -36,9 +36,14 @@ export default function NavBar() {
               About
             </Link>
             {session && (
-              <Link href="/dashboard" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
-                Dashboard
-              </Link>
+              <>
+                <Link href="/dashboard" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
+                  Dashboard
+                </Link>
+                <Link href="/stock-predictor" className="text-white font-semibold hover:text-blue-300 transition-colors drop-shadow-lg">
+                  Stock Predictor
+                </Link>
+              </>
             )}
             {session && (session.user as { role?: string })?.role === "admin" && (
               <>
