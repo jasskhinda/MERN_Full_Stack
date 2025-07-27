@@ -8,7 +8,7 @@ import { stockData as defaultStockData } from '@/lib/stockData';
 
 export default function StockPredictor() {
   const [stockData, setStockData] = useState(defaultStockData);
-  const [predictions, setPredictions] = useState([]);
+  const [predictions, setPredictions] = useState<Array<{ date: string; price: number; isPrediction: boolean }>>([]);
   const [isTraining, setIsTraining] = useState(false);
 
   return (
