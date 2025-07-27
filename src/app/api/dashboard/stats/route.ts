@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.id) {
+    if (!session?.user || !(session.user as { id?: string }).id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -18,8 +18,9 @@ export async function GET() {
     const totalUsers = await db.collection('users').countDocuments();
     
     // Get user's recent activity
+    const userId = (session.user as { id: string }).id;
     const recentActivity = await db.collection('audit_logs')
-      .find({ actorId: session.user.id })
+      .find({ actorId: userId })
       .sort({ timestamp: -1 })
       .limit(4)
       .toArray();
