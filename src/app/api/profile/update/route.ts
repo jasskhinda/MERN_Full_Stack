@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update user profile
-    const updateData: Record<string, any> = {
+    const updateData: Record<string, string | Date> = {
       name: name.trim(),
       updatedAt: new Date()
     };

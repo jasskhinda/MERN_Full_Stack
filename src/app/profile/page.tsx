@@ -15,15 +15,6 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (session?.user) {
-        await fetchProfileData();
-      }
-    };
-    loadProfile();
-  }, [session]);
-
   const fetchProfileData = async () => {
     try {
       const response = await fetch('/api/profile');
@@ -52,6 +43,12 @@ export default function ProfilePage() {
       });
     }
   };
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchProfileData();
+    }
+  }, [session, fetchProfileData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
