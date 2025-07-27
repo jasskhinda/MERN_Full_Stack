@@ -104,7 +104,7 @@ function StockChart({ stockData, predictions }: StockChartProps) {
         borderColor: 'rgb(59, 130, 246)',
         borderWidth: 1,
         callbacks: {
-          label: function(context: any) {
+          label: function(context: {dataset: {label?: string}; parsed: {y: number | null}}) {
             let label = context.dataset.label || '';
             if (label) {
               label += ': ';
@@ -143,7 +143,7 @@ function StockChart({ stockData, predictions }: StockChartProps) {
         },
         ticks: {
           color: 'white',
-          callback: function(value: any) {
+          callback: function(value: number) {
             return '$' + value.toFixed(2);
           }
         },

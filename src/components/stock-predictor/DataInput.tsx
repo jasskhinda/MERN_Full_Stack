@@ -22,7 +22,7 @@ function DataInput({ stockData, setStockData }: DataInputProps) {
         } else {
           alert('Please provide at least 50 data points');
         }
-      } catch (error) {
+      } catch {
         alert('Invalid JSON format');
       }
     };
@@ -54,7 +54,7 @@ function DataInput({ stockData, setStockData }: DataInputProps) {
           />
         </div>
         <div className="text-xs text-gray-400">
-          <p>Format: [{"{"}"date": "YYYY-MM-DD", "price": 100.00{"}"}]</p>
+          <p>Format: [{&quot;date&quot;: &quot;YYYY-MM-DD&quot;, &quot;price&quot;: 100.00}]</p>
           <p>Minimum 50 data points required</p>
         </div>
       </div>

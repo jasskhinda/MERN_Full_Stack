@@ -4,7 +4,22 @@ import React, { useState, useEffect } from 'react';
 
 declare global {
   interface Window {
-    brain: any;
+    brain: {
+      NeuralNetwork: new (config: {
+        hiddenLayers: number[];
+        activation: string;
+        learningRate: number;
+      }) => {
+        trainAsync: (data: Array<{input: number[]; output: number[]}>, options: {
+          iterations: number;
+          errorThresh: number;
+          log: boolean;
+          logPeriod: number;
+          callback: (data: {iterations: number}) => void;
+        }) => Promise<void>;
+        run: (input: number[]) => number[];
+      };
+    };
   }
 }
 
@@ -93,7 +108,7 @@ function PredictionModel({ stockData, setPredictions, isTraining, setIsTraining 
         errorThresh: 0.003,
         log: true,
         logPeriod: 100,
-        callback: (data: any) => {
+        callback: (data: {iterations: number}) => {
           const progress = Math.min((data.iterations / 3000) * 100, 100);
           setConfidence(progress);
           setTrainingStatus(`🔥 Training... ${progress.toFixed(0)}% complete`);
@@ -105,7 +120,7 @@ function PredictionModel({ stockData, setPredictions, isTraining, setIsTraining 
       const lastWindowSize = 5;
       const lastWindow = normalizedPrices.slice(-lastWindowSize);
       const predictions = [];
-      let currentInput = [...lastWindow];
+      const currentInput = [...lastWindow];
 
       for (let i = 0; i < 10; i++) {
         const prediction = net.run(currentInput)[0];
@@ -135,8 +150,8 @@ function PredictionModel({ stockData, setPredictions, isTraining, setIsTraining 
         }, 2000);
       }
       
-    } catch (error: any) {
-      setTrainingStatus('❌ Error: ' + error.message);
+    } catch (error) {
+      setTrainingStatus('❌ Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setIsTraining(false);
     }
