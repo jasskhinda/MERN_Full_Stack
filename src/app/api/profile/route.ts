@@ -34,7 +34,8 @@ export async function GET() {
       email: user.email || '',
       bio: user.bio || '',
       location: user.location || '',
-      website: user.website || ''
+      website: user.website || '',
+      profileImage: user.profileImage || null
     });
   } catch (error) {
     console.error('Profile fetch error:', error);

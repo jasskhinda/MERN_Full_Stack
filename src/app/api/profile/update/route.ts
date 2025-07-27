@@ -13,7 +13,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, bio, location, website } = await request.json();
+    const { name, bio, location, website, profileImage } = await request.json();
 
     if (!name || name.trim().length === 0) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -58,6 +58,9 @@ export async function PUT(request: NextRequest) {
     }
     if (website !== undefined && website.trim() !== '') {
       updateData.website = website.trim();
+    }
+    if (profileImage !== undefined && profileImage !== null) {
+      updateData.profileImage = profileImage;
     }
 
     const result = await db.collection('users').updateOne(

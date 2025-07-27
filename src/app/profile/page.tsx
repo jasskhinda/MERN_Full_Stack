@@ -14,6 +14,7 @@ export default function ProfilePage() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
   const fetchProfileData = useCallback(async () => {
     try {
@@ -21,6 +22,7 @@ export default function ProfilePage() {
       if (response.ok) {
         const profileData = await response.json();
         setFormData(profileData);
+        setProfileImage(profileData.profileImage || null);
       } else {
         // Fallback to session data
         setFormData({
@@ -50,6 +52,30 @@ export default function ProfilePage() {
     }
   }, [session, fetchProfileData]);
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setMessage('❌ Image must be less than 5MB');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        setMessage('❌ Please select an image file');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setProfileImage(event.target?.result as string);
+        setMessage('📸 Image uploaded! Click Save Changes to update your profile.');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -65,7 +91,8 @@ export default function ProfilePage() {
           name: formData.name,
           bio: formData.bio,
           location: formData.location,
-          website: formData.website
+          website: formData.website,
+          profileImage: profileImage
         }),
       });
 
@@ -111,14 +138,34 @@ export default function ProfilePage() {
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6">
               <h2 className="text-xl font-semibold text-white mb-4">Profile Picture</h2>
               <div className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-bold text-4xl">
-                    {session.user?.email?.charAt(0).toUpperCase()}
-                  </span>
+                <div className="w-32 h-32 rounded-full mx-auto mb-4 overflow-hidden border-4 border-white/20">
+                  {profileImage ? (
+                    <img 
+                      src={profileImage} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                      <span className="text-white font-bold text-4xl">
+                        {session.user?.email?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  )}
                 </div>
-                <button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="profile-image-upload"
+                />
+                <label 
+                  htmlFor="profile-image-upload"
+                  className="cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 inline-block"
+                >
                   Change Picture
-                </button>
+                </label>
               </div>
             </div>
           </div>
