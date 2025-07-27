@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db('fullstack_app');
+    const db = client.db();
     
     // Get real stats
     const totalUsers = await db.collection('users').countDocuments();
