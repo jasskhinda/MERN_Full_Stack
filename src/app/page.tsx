@@ -64,6 +64,12 @@ export default function HomePage() {
                   >
                     Sign In
                   </Link>
+                  <Link 
+                    href="/admin/login" 
+                    className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg border-2 border-red-500 animate-pulse"
+                  >
+                    🛡️ ADMIN LOGIN
+                  </Link>
                 </>
               )}
             </div>

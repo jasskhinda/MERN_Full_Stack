@@ -140,6 +140,19 @@ export default function LoginPage() {
           >
             Forgot your password?
           </Link>
+          
+          {/* Admin Access */}
+          <div className="mt-6 pt-4 border-t border-white/20">
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <p className="text-red-300 text-sm font-medium mb-2">Administrator Access</p>
+              <Link 
+                href="/admin/login"
+                className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg text-sm"
+              >
+                🛡️ ADMIN LOGIN
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
