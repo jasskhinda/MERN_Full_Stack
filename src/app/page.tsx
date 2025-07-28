@@ -36,10 +36,16 @@ export default function HomePage() {
               {session ? (
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link 
+                    href="/stock-predictor" 
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-lg border-2 border-green-400"
+                  >
+                    🤖 AI Stock Predictor
+                  </Link>
+                  <Link 
                     href="/dashboard" 
                     className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
                   >
-                    Go to Dashboard →
+                    Dashboard →
                   </Link>
                   {(session.user as { role?: string })?.role === 'admin' && (
                     <Link 

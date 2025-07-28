@@ -96,6 +96,30 @@ export default function DashboardPage() {
           </p>
         </div>
 
+        {/* Assignment 4 Feature Highlight */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-md border border-blue-400/50 rounded-xl p-8 shadow-2xl">
+            <div className="text-center">
+              <div className="text-6xl mb-4">🤖</div>
+              <h3 className="text-3xl font-bold text-white mb-3">AI Stock Market Predictor</h3>
+              <p className="text-white/80 text-lg mb-6">Assignment 4 Integration: Neural network-powered stock price predictions using Brain.js</p>
+              <Link 
+                href="/stock-predictor"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg text-xl border border-blue-400"
+              >
+                🚀 LAUNCH AI PREDICTOR
+              </Link>
+              <div className="mt-4 flex justify-center space-x-4 text-sm">
+                <span className="text-blue-300">📊 Multiple AI Models</span>
+                <span className="text-white/30">|</span>
+                <span className="text-purple-300">📈 Real-time Data</span>
+                <span className="text-white/30">|</span>
+                <span className="text-blue-300">🎯 10-day Forecasts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
@@ -125,6 +149,7 @@ export default function DashboardPage() {
               <h2 className="text-xl font-semibold text-white mb-4">⚡ Quick Actions</h2>
               <div className="space-y-3">
                 {[
+                  { icon: "🤖", label: "AI Stock Predictor", href: "/stock-predictor", description: "Neural network stock predictions", featured: true },
                   { icon: "👤", label: "Edit Profile", href: "/profile", description: "Update your personal information" },
                   { icon: "🔒", label: "Security", href: "/security", description: "Manage passwords and 2FA" },
                   { icon: "📊", label: "Analytics", href: "/analytics", description: "View your usage statistics" },
@@ -133,7 +158,11 @@ export default function DashboardPage() {
                   <Link
                     key={index}
                     href={action.href}
-                    className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200 group border border-white/10"
+                    className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 group border ${
+                      action.featured 
+                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 border-blue-400/50' 
+                        : 'bg-white/5 hover:bg-white/10 border-white/10'
+                    }`}
                   >
                     <span className="text-2xl">{action.icon}</span>
                     <div>
